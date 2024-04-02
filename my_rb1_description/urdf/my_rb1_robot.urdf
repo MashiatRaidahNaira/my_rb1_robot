@@ -7,18 +7,87 @@
     </gazebo>
     <gazebo reference="front_caster">
         <material>Gazebo/Black</material>
+        <mu1>0.0</mu1>
+        <mu2>0.0</mu2>
     </gazebo>
     <gazebo reference="back_caster">
         <material>Gazebo/Black</material>
+        <mu1>0.0</mu1>
+        <mu2>0.0</mu2>
     </gazebo>
     <gazebo reference="left_wheel">
         <material>Gazebo/Black</material>
+        <mu1>1.0</mu1>
+        <mu2>1.0</mu2>
     </gazebo>
     <gazebo reference="right_wheel">
         <material>Gazebo/Black</material>
+        <mu1>1.0</mu1>
+        <mu2>1.0</mu2>
     </gazebo>
-    <gazebo reference="front_laser">
+    <gazebo reference = "front_laser">
         <material>Gazebo/Black</material>
+    </gazebo>
+
+    <gazebo reference="joint_caster_wheel_front">
+        <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+    <gazebo reference="joint_caster_wheel_back">
+        <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+    
+
+    <gazebo>
+        <plugin filename="libgazebo_ros_diff_drive.so" name="differential_drive_controller">
+            <alwaysOn>true</alwaysOn>
+            <updateRate>20</updateRate>
+            <leftJoint>joint_base_left_wheel</leftJoint>
+            <rightJoint>joint_base_right_wheel</rightJoint>
+            <wheelSeparation>0.4</wheelSeparation>
+            <wheelDiameter>0.05</wheelDiameter>
+            <torque>10</torque>
+            <commandTopic>cmd_vel</commandTopic>
+            <odometryTopic>odom</odometryTopic>
+            <odometryFrame>odom</odometryFrame>
+            <robotBaseFrame>base_footprint</robotBaseFrame>
+            <publishWheelJointState>true</publishWheelJointState>
+            <legacyMode>true</legacyMode>
+        </plugin>
+    </gazebo>
+
+    <gazebo reference = "joint_front_laser">
+        <preserveFixedJoint>true</preserveFixedJoint>
+    </gazebo>
+    <gazebo reference = "front_laser">
+        <sensor type="ray" name="head_hokuyo_sensor">
+            <pose>0 0 0 0 0 0</pose>
+            <visualize>false</visualize>
+            <update_rate>40</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>720</samples>
+                        <resolution>1</resolution>
+                        <min_angle>-1.570796</min_angle>
+                        <max_angle>1.570796</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.10</min>
+                    <max>30.0</max>
+                    <resolution>0.01</resolution>
+                </range>
+                <noise>
+                    <type>gaussian</type>
+                    <mean>0.0</mean>
+                    <stddev>0.01</stddev>
+                </noise>
+            </ray>
+            <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+                <topicName>/scan</topicName>
+                <frameName>front_laser</frameName>
+            </plugin>
+        </sensor>
     </gazebo>
 
     <!-- Base - Link -->
